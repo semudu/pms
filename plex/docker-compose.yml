@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: bridge
+    environment:
+      - TZ=Europe/Istanbul
+      - PLEX_CLAIM=***
+      - VERSION=docker
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - d:\personal\plex\data\movies:/movies
+      - d:\personal\plex\data\series:/tv
+      - d:\personal\plex\data\music:/music
+      - d:\personal\plex\config:/config
+      - d:\personal\plex\transcode:/transcode
+    ports:
+      - 0.0.0.0:32400:32400/tcp
+      - 0.0.0.0:3005:3005/tcp
+      - 0.0.0.0:8324:8324/tcp
+      - 0.0.0.0:32469:32469/tcp
+      - 0.0.0.0:1900:1900/udp
+      - 0.0.0.0:32410:32410/udp
+      - 0.0.0.0:32412:32412/udp
+      - 0.0.0.0:32413:32413/udp
+      - 0.0.0.0:32414:32414/udp
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: ["gpu"]
+            count: all  # Adjust count for the number of GPUs you want to use
+    restart: unless-stopped
